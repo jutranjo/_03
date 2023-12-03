@@ -52,6 +52,27 @@ fn create_grid(input: &str) -> Vec<Vec<char>> {
     grid
 }
 
+pub fn sum_up_gears(input: &str) -> u32 {
+    let grid = create_grid(input);
+
+    let mut line_index = 0;
+    input
+        .lines()
+        .map(|line| {
+            let mut char_index = 0;
+
+            for ch in line.chars() {
+                if ch=='*' {
+                    println!("Found * at {} {}",line_index,char_index);
+                } 
+                char_index+=1;
+            }
+            line_index+=1;
+            0
+        }).sum()
+    
+}
+
 pub fn sum_up_schematic(input: &str) -> u32 {
 
     let grid = create_grid(input);
@@ -91,6 +112,14 @@ pub fn sum_up_schematic(input: &str) -> u32 {
                 }
                 char_index+=1;
             }
+            if !current_number_string.is_empty() {
+                if let Ok(parsed_number) = current_number_string.parse::<u32>() {
+                    if number_touches_symbol {
+                        line_sum += parsed_number;
+                    }
+                }
+            }
+
             line_index+=1;
             line_sum
         }).sum()
@@ -135,6 +164,44 @@ mod tests {
         for &symbol in &non_alpha_numeric_symbols {
             assert_eq!(true, check_if_symbol(symbol));
         }
+    }
+
+    #[test]
+    fn does_bad_example_work() {
+        let input = fs::read_to_string("bad_example.txt").expect("example.txt cannot be opened");
+        let grid = create_grid(&input);
+
+        let row = 0;
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 0), false);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 1), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 2), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 3), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 4), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 5), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 6), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 7), false);
+        
+        let row = 1;
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 0), false);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 1), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 2), false);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 3), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 4), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 5), false);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 6), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 7), false);
+
+        
+        let row = 2;
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 0), false);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 1), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 2), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 3), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 4), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 5), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 6), true);
+        assert_eq!(check_if_symbol_adjacent(&grid, row, 7), false);
+
     }
 
     #[test]
