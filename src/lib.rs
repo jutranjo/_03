@@ -44,6 +44,18 @@ fn check_if_symbol_adjacent(grid: &Vec<Vec<char>>, line_pos: usize, char_pos: us
     neighbour_is_symbol
 }
 
+struct GridPosition {
+    line_index: u32,
+    char_index: u32,
+}
+
+fn check_how_many_neighbours_at_gear(grid: &Vec<Vec<char>>, position: GridPosition) -> u32 {
+    //if let Some(value) = safe_lookup_grid_for_symbol(grid, grid_position.line_index, grid_position.char_index){
+    //    println!("found {} at {} {}",value, grid_position.line_index, grid_position.char_index);
+    //}
+    3
+}
+
 fn create_grid(input: &str) -> Vec<Vec<char>> {
     let mut grid: Vec<Vec<char>> = Vec::new();
     for line in input.lines() {
@@ -64,6 +76,8 @@ pub fn sum_up_gears(input: &str) -> u32 {
             for ch in line.chars() {
                 if ch=='*' {
                     println!("Found * at {} {}",line_index,char_index);
+                    let current_position = GridPosition {line_index: line_index, char_index: char_index};
+                    let neighbours = check_how_many_neighbours_at_gear(&grid, current_position);
                 } 
                 char_index+=1;
             }
